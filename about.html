@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Launchpad AI Corporation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ── GHL container overrides ───────────────────────────── */
+    html, body { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .elfsight-app, .funnelish--page, .funnelish--sections,
+    #page, .page-container, .container-fluid,
+    [class*="section-"], [class*="container"] { max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #080808;
+      --surface:   #111111;
+      --surface2:  #181818;
+      --border:    rgba(255,255,255,0.08);
+      --orange:    #F97316;
+      --orange-h:  #fb8a2e;
+      --white:     #ffffff;
+      --sub:       rgba(255,255,255,0.62);
+      --muted:     rgba(255,255,255,0.35);
+      --max:       1200px;
+      --r:         10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+    }
+
+    /* ── Nav ───────────────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    }
+    .nav-logo {
+      font-size: 1.2rem; font-weight: 800; color: var(--white);
+      text-decoration: none; white-space: nowrap; letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--sub); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta {
+      background: var(--orange); color: var(--white);
+      padding: 0.55rem 1.3rem; border-radius: var(--r);
+      font-weight: 700; font-size: 0.88rem; text-decoration: none;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--orange-h); }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px; transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; flex-direction: column;
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem); gap: 1rem;
+    }
+    .mobile-menu a {
+      color: var(--sub); text-decoration: none; font-size: 1rem;
+      font-weight: 500; padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu .mobile-cta {
+      background: var(--orange); color: var(--white);
+      text-align: center; padding: 0.8rem; border-radius: var(--r);
+      font-weight: 700; margin-top: 0.5rem; border-bottom: none;
+    }
+    .mobile-menu.open { display: flex; }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 5vw, 3rem) clamp(4rem, 8vw, 7rem);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -20%; right: -10%;
+      width: 60vw; max-width: 700px; height: 60vw; max-height: 700px;
+      background: radial-gradient(ellipse at center,
+        rgba(249,115,22,0.18) 0%, rgba(249,115,22,0.06) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-block; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
+      margin-bottom: 1.5rem; max-width: 760px;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--sub); max-width: 560px; line-height: 1.7;
+    }
+
+    /* ── Sections ──────────────────────────────────────────── */
+    .section { padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 5vw, 3rem); }
+    .section-surface { background: var(--surface); }
+    .section-surface2 { background: var(--surface2); }
+
+    .eyebrow {
+      display: inline-block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 1rem;
+    }
+    .section-heading {
+      font-size: clamp(1.8rem, 4vw, 2.9rem);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: var(--sub); font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      max-width: 560px; line-height: 1.7;
+    }
+    .section-header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+
+    .btn {
+      display: inline-block; padding: 0.9rem 2rem;
+      border-radius: var(--r); font-weight: 700;
+      font-size: 0.95rem; text-decoration: none;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-orange { background: var(--orange); color: var(--white); }
+    .btn-orange:hover { background: var(--orange-h); transform: translateY(-2px); }
+
+    /* ── Grid ──────────────────────────────────────────────── */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: 1.25rem;
+    }
+    .value-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: clamp(1.5rem, 3vw, 2rem);
+    }
+    .value-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .value-card p { color: var(--sub); font-size: 0.93rem; line-height: 1.7; }
+
+    /* ── Split ─────────────────────────────────────────────── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 5vw, 5rem);
+      align-items: center;
+    }
+    .body-copy p { color: var(--sub); font-size: 0.98rem; line-height: 1.75; }
+    .body-copy p + p { margin-top: 1rem; }
+    .body-copy strong { color: var(--white); }
+
+    .fit-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+    .fit-list li {
+      color: var(--sub); font-size: 0.93rem;
+      padding-left: 1.5rem; position: relative; line-height: 1.5;
+    }
+    .fit-list li::before {
+      content: '→'; position: absolute; left: 0;
+      color: var(--orange); font-weight: 700;
+    }
+
+    /* ── Stats ─────────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+      gap: 1.25rem;
+    }
+    .stat-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: clamp(1.5rem, 3vw, 2rem);
+    }
+    .stat-block .num {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 900; color: var(--orange);
+      letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.6rem;
+    }
+    .stat-block p { color: var(--sub); font-size: 0.9rem; line-height: 1.6; }
+
+    /* ── CTA strip ─────────────────────────────────────────── */
+    .cta-strip {
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 5vw, 3rem);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-strip::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vw; max-width: 900px; height: 400px;
+      background: radial-gradient(ellipse at center,
+        rgba(249,115,22,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-strip .wrap { position: relative; z-index: 1; }
+    .cta-strip h2 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem;
+    }
+    .cta-strip p {
+      color: var(--sub); max-width: 520px;
+      margin: 0 auto 2.25rem; font-size: 1.05rem; line-height: 1.7;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 2rem clamp(1.25rem, 5vw, 3rem);
+    }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto;
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 1rem;
+    }
+    .footer p { color: var(--muted); font-size: 0.85rem; }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a {
+      color: var(--muted); font-size: 0.85rem;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .split { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Launchpad <span>AI</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about" class="active">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <a href="/contact" class="nav-cta">Apply to Work With Us</a>
+    <button class="hamburger" aria-label="Menu" onclick="this.classList.toggle('open'); document.getElementById('mobile-menu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    <a href="/contact" class="mobile-cta">Apply to Work With Us</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">About Launchpad AI</p>
+    <h1>We Built This Because Lead Generation Alone Isn't Enough.</h1>
+    <p class="hero-sub">
+      Every marketing agency will sell you leads. Pour money into ads, dump names into your inbox, and call it a win. Launchpad AI exists because lead generation without lead conversion is a waste of money.
+    </p>
+  </div>
+</section>
+
+<!-- ORIGIN -->
+<section class="section section-surface">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Why We Built This</p>
+        <h2 class="section-heading">The problem was never leads. It was everything after the lead.</h2>
+      </div>
+      <div class="body-copy">
+        <p>We watched roofing companies spend thousands on advertising only to lose jobs because of what happened — or didn't happen — after someone raised their hand.</p>
+        <p>Slow follow-up. Missed calls. Forgotten quotes. Inconsistent salespeople having inconsistent days.</p>
+        <p>The bottleneck was never the leads. It was the gap between "new lead" and "booked appointment." That gap is where revenue goes to die.</p>
+        <p><strong>So we built a system that eliminates it.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-header center">
+      <p class="eyebrow">What Makes Us Different</p>
+      <h2 class="section-heading">Not a feature. A philosophy.</h2>
+      <p class="section-sub">Three things that make this unlike any other marketing agency you've talked to.</p>
+    </div>
+    <div class="grid-3">
+      <div class="value-card">
+        <h3>We Don't Sell Leads. We Deliver Revenue.</h3>
+        <p>Our system controls the entire chain — from the first ad a homeowner sees to the AI call 10 seconds after they opt in, to the follow-up text they get 4 months later when they're finally ready to move forward.</p>
+      </div>
+      <div class="value-card">
+        <h3>We Protect Your Market.</h3>
+        <p>One roofing company per 80km radius. We don't help you generate demand and then sell the same system to your competitor. Your territory is yours, period.</p>
+      </div>
+      <div class="value-card">
+        <h3>AI Speed. Human Judgment.</h3>
+        <p>Our AI agents handle instant response and tireless follow-up at a scale no human team can match. Our human AI managers review every interaction daily to make sure quality never slips. Fast doesn't mean sloppy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE WORK WITH -->
+<section class="section section-surface">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Who We Work With</p>
+        <h2 class="section-heading">We work with a specific kind of roofing company.</h2>
+        <div class="body-copy" style="margin-top: 1.25rem;">
+          <p>Not every roofer is the right fit. We built this for companies that charge above average in their market — companies that compete on craftsmanship, reputation, and results, not on being the cheapest bid.</p>
+          <p>Our ad campaigns are designed around exclusivity. Homeowners apply to be selected. That model attracts people who value quality work.</p>
+          <p><strong>If your business model is "do great work, charge what it's worth, and grow predictably" — we should talk.</strong></p>
+        </div>
+      </div>
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: clamp(1.5rem, 3vw, 2.25rem);">
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem;">Built For Roofers Who:</h3>
+        <ul class="fit-list">
+          <li>Charge above average in their market</li>
+          <li>Compete on craftsmanship and reputation</li>
+          <li>Want predictable, scalable growth</li>
+          <li>Value quality leads over raw volume</li>
+          <li>Are ready to let a system do the heavy lifting on follow-up</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section section-surface2">
+  <div class="wrap">
+    <div class="section-header center">
+      <p class="eyebrow">The Results</p>
+      <h2 class="section-heading">The results speak clearly.</h2>
+      <p class="section-sub">We let the numbers do the talking — no inflated claims, no borrowed credibility.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="num">$785,000+</div>
+        <p>Revenue closed by JJ Roofing through our system in just over one year of working together.</p>
+      </div>
+      <div class="stat-block">
+        <div class="num">$68,250</div>
+        <p>A single deal recovered by the AI follow-up agent months after the original quote. The owner had completely forgotten about that lead. The AI hadn't.</p>
+      </div>
+    </div>
+    <p style="color: var(--sub); font-size: 0.95rem; margin-top: 2rem; max-width: 640px;">
+      <strong style="color: var(--white);">That's the difference between a lead generation service and a revenue system.</strong> One delivers names. The other delivers closed deals.
+    </p>
+  </div>
+</section>
+
+<!-- STANDARD -->
+<section class="section section-surface">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Our Standard</p>
+        <h2 class="section-heading">AI for speed.<br>Humans for quality.</h2>
+        <div class="body-copy" style="margin-top: 1.25rem;">
+          <p>We believe AI is the most powerful tool available to roofing companies today — but only when it's managed properly.</p>
+          <p>That's why every AI call and text is reviewed daily by our human team. We catch edge cases. We refine responses. We make sure the AI represents your company the way you'd want it represented.</p>
+          <p><strong>Fast doesn't mean sloppy. Automated doesn't mean unsupervised.</strong></p>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">AI Handles</h3>
+          <p style="color: var(--sub); font-size: 0.9rem; line-height: 1.6;">Speed-to-lead calls, 24/7 availability, consistent follow-up sequences, calendar booking, pipeline nurturing.</p>
+        </div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Humans Handle</h3>
+          <p style="color: var(--sub); font-size: 0.9rem; line-height: 1.6;">Daily call review, quality assurance, AI optimization, edge-case recovery, and making sure your brand is always represented correctly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip section-surface2">
+  <div class="wrap">
+    <h2>We're selective<br>because the model demands it.</h2>
+    <p>Territory exclusivity means we can only work with a limited number of roofing companies. We take the ones we can build real, measurable results for — and then we protect their market.</p>
+    <a href="/contact" class="btn btn-orange">Apply to Work With Us</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p>&copy; 2026 Launchpad AI Corporation. All rights reserved.</p>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
