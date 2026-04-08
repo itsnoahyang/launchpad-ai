@@ -369,6 +369,23 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Scroll to form on mobile after GHL form submission
+  window.addEventListener('message', (e) => {
+    if (window.innerWidth > 1024) return; // mobile only
+    const data = e.data;
+    const isSubmit =
+      (typeof data === 'string' && (data.includes('submit') || data.includes('form'))) ||
+      (typeof data === 'object' && data !== null && (
+        data.type === 'form-submitted' ||
+        data.type === 'formSubmit' ||
+        data.event === 'form_submitted' ||
+        JSON.stringify(data).toLowerCase().includes('submit')
+      ));
+    if (isSubmit) {
+      document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 </script>
 </body>
 </html>
