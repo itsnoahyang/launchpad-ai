@@ -207,62 +207,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: clamp(1.75rem, 4vw, 2.75rem);
-    }
-    .form-card h3 {
-      font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem;
-    }
-    .form-card .form-sub {
-      color: var(--sub); font-size: 0.88rem;
-      margin-bottom: 2rem; line-height: 1.5;
-    }
-
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label {
-      display: block; font-size: 0.82rem; font-weight: 600;
-      color: var(--sub); margin-bottom: 0.5rem; letter-spacing: 0.02em;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      color: var(--white);
-      font-family: inherit;
-      font-size: 0.95rem;
-      padding: 0.8rem 1rem;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      -webkit-appearance: none;
-    }
-    .form-group input::placeholder,
-    .form-group textarea::placeholder { color: var(--muted); }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: rgba(0,103,235,0.5);
-      background: #1e1e1e;
-    }
-    .form-group textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
-    .form-group select option { background: var(--surface2); color: var(--white); }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-    .btn-submit {
-      width: 100%; padding: 1rem;
-      background: var(--blue); color: var(--white);
-      border: none; border-radius: var(--r);
-      font-family: inherit; font-size: 1rem; font-weight: 700;
-      cursor: pointer; transition: all 0.2s; margin-top: 0.5rem;
-      letter-spacing: -0.01em;
-    }
-    .btn-submit:hover { background: var(--blue-h); transform: translateY(-2px); }
-
-    .form-disclaimer {
-      font-size: 0.78rem; color: var(--muted);
-      margin-top: 1rem; line-height: 1.5; text-align: center;
+      overflow: hidden;
+      padding: 0;
     }
 
     /* ── Footer ────────────────────────────────────────────── */
@@ -377,59 +323,24 @@
 
     <!-- Right: Form -->
     <div class="form-card reveal reveal-delay-1" id="apply">
-      <h3>Apply to Work With Launchpad AI</h3>
-      <p class="form-sub">Takes about 2 minutes. We'll review and follow up within one business day.</p>
-
-      <form>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="first-name">First Name</label>
-            <input type="text" id="first-name" name="first_name" placeholder="John" required>
-          </div>
-          <div class="form-group">
-            <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" name="last_name" placeholder="Smith" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="company">Roofing Company Name</label>
-          <input type="text" id="company" name="company" placeholder="Smith Roofing Co." required>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="you@yourcompany.com" required>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
-        </div>
-
-        <div class="form-group">
-          <label for="location">What city / market do you serve?</label>
-          <input type="text" id="location" name="location" placeholder="e.g. Calgary, AB" required>
-        </div>
-
-        <div class="form-group">
-          <label for="current-ads">Are you currently running paid ads?</label>
-          <select id="current-ads" name="current_ads">
-            <option value="" disabled selected>Select an option</option>
-            <option value="yes-meta">Yes, Meta (Facebook/Instagram)</option>
-            <option value="yes-google">Yes, Google</option>
-            <option value="yes-both">Yes, both</option>
-            <option value="no">No, not currently</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="goal">What are you looking to achieve? (optional)</label>
-          <textarea id="goal" name="goal" placeholder="E.g. more consistent leads, faster follow-up, we're getting leads but they're not converting..."></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit">Submit Application</button>
-      </form>
+      <iframe
+        src="https://link.golaunchpad.co/widget/form/z6zBLV008CRqDFU0i0sd"
+        style="width:100%;height:849px;border:none;display:block;"
+        id="inline-z6zBLV008CRqDFU0i0sd"
+        data-layout="{'id':'INLINE'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="Website Form Opt-In"
+        data-height="849"
+        data-layout-iframe-id="inline-z6zBLV008CRqDFU0i0sd"
+        data-form-id="z6zBLV008CRqDFU0i0sd"
+        title="Website Form Opt-In"
+      ></iframe>
+      <script src="https://link.golaunchpad.co/js/form_embed.js"></script>
     </div>
 
   </div>
