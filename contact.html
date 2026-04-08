@@ -21,8 +21,9 @@
       --surface:   #111111;
       --surface2:  #181818;
       --border:    rgba(255,255,255,0.08);
-      --orange:    #F97316;
-      --orange-h:  #fb8a2e;
+      --blue:       #0067eb;
+      --blue-h:     #1a7aff;
+      --gold:       #ffcf00;
       --white:     #ffffff;
       --sub:       rgba(255,255,255,0.62);
       --muted:     rgba(255,255,255,0.35);
@@ -61,10 +62,15 @@
       display: flex; align-items: center; justify-content: space-between; gap: 2rem;
     }
     .nav-logo {
-      font-size: 1.2rem; font-weight: 800; color: var(--white);
-      text-decoration: none; white-space: nowrap; letter-spacing: -0.02em;
+      font-size: 1.2rem; font-weight: 900; color: var(--white);
+      text-decoration: none; white-space: nowrap; letter-spacing: -0.01em;
+      display: flex; align-items: center; gap: 2px;
     }
-    .nav-logo span { color: var(--orange); }
+    .nav-logo .pad {
+      background: var(--blue); color: #fff;
+      padding: 0.1em 0.45em; border-radius: 7px;
+      font-weight: 900; letter-spacing: -0.01em;
+    }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a {
       color: var(--sub); text-decoration: none; font-size: 0.9rem;
@@ -72,12 +78,12 @@
     }
     .nav-links a:hover, .nav-links a.active { color: var(--white); }
     .nav-cta {
-      background: var(--orange); color: var(--white);
+      background: var(--blue); color: var(--white);
       padding: 0.55rem 1.3rem; border-radius: var(--r);
       font-weight: 700; font-size: 0.88rem; text-decoration: none;
       transition: background 0.2s; white-space: nowrap;
     }
-    .nav-cta:hover { background: var(--orange-h); }
+    .nav-cta:hover { background: var(--blue-h); }
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
       background: none; border: none; cursor: pointer; padding: 4px;
@@ -100,7 +106,7 @@
     }
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu .mobile-cta {
-      background: var(--orange); color: var(--white);
+      background: var(--blue); color: var(--white);
       text-align: center; padding: 0.8rem; border-radius: var(--r);
       font-weight: 700; margin-top: 0.5rem; border-bottom: none;
     }
@@ -116,14 +122,14 @@
       position: absolute; top: -20%; right: -10%;
       width: 60vw; max-width: 700px; height: 60vw; max-height: 700px;
       background: radial-gradient(ellipse at center,
-        rgba(249,115,22,0.18) 0%, rgba(249,115,22,0.06) 40%, transparent 70%);
+        rgba(0,103,235,0.18) 0%, rgba(0,103,235,0.06) 40%, transparent 70%);
       pointer-events: none;
     }
     .hero-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 1; }
     .hero-eyebrow {
       display: inline-block; font-size: 0.75rem; font-weight: 700;
       letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 1.5rem;
+      color: var(--gold); margin-bottom: 1.5rem;
     }
     .hero h1 {
       font-size: clamp(2.4rem, 5.5vw, 4.5rem);
@@ -151,7 +157,7 @@
     .eyebrow {
       display: inline-block; font-size: 0.72rem; font-weight: 700;
       letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 1rem;
+      color: var(--gold); margin-bottom: 1rem;
     }
     .contact-info h2 {
       font-size: clamp(1.6rem, 3vw, 2.25rem);
@@ -175,11 +181,11 @@
     .what-step-num {
       flex-shrink: 0;
       width: 28px; height: 28px;
-      background: rgba(249,115,22,0.12);
-      border: 1px solid rgba(249,115,22,0.25);
+      background: rgba(0,103,235,0.12);
+      border: 1px solid rgba(0,103,235,0.25);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700; color: var(--orange);
+      font-size: 0.75rem; font-weight: 700; color: var(--blue);
     }
     .what-step-body p {
       font-size: 0.88rem; color: var(--sub); line-height: 1.55;
@@ -226,7 +232,7 @@
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      border-color: rgba(249,115,22,0.5);
+      border-color: rgba(0,103,235,0.5);
       background: #1e1e1e;
     }
     .form-group textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
@@ -236,13 +242,13 @@
 
     .btn-submit {
       width: 100%; padding: 1rem;
-      background: var(--orange); color: var(--white);
+      background: var(--blue); color: var(--white);
       border: none; border-radius: var(--r);
       font-family: inherit; font-size: 1rem; font-weight: 700;
       cursor: pointer; transition: all 0.2s; margin-top: 0.5rem;
       letter-spacing: -0.01em;
     }
-    .btn-submit:hover { background: var(--orange-h); transform: translateY(-2px); }
+    .btn-submit:hover { background: var(--blue-h); transform: translateY(-2px); }
 
     .form-disclaimer {
       font-size: 0.78rem; color: var(--muted);
@@ -288,7 +294,7 @@
 <!-- NAV -->
 <header class="nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">Launchpad <span>AI</span></a>
+    <a href="/" class="nav-logo">Launch<span class="pad">Pad</span></a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/about">About</a></li>
