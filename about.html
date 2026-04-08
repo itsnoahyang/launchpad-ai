@@ -16,6 +16,21 @@
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ── Scroll progress ───────────────────────────────────── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transition: width 0.1s linear;
+    }
+
+    /* ── Reveal on scroll ──────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
     :root {
       --bg:        #080808;
       --surface:   #111111;
@@ -285,6 +300,7 @@
   </style>
 </head>
 <body>
+<div id="scroll-progress"></div>
 
 <!-- NAV -->
 <header class="nav">
@@ -340,21 +356,21 @@
 <!-- VALUES -->
 <section class="section">
   <div class="wrap">
-    <div class="section-header center">
+    <div class="section-header center reveal">
       <p class="eyebrow">What Makes Us Different</p>
       <h2 class="section-heading">Not a feature. A philosophy.</h2>
       <p class="section-sub">Three things that make this unlike any other marketing agency you've talked to.</p>
     </div>
     <div class="grid-3">
-      <div class="value-card">
+      <div class="value-card reveal">
         <h3>We Don't Sell Leads. We Deliver Revenue.</h3>
         <p>Our system controls the entire chain: from the first ad a homeowner sees, to the AI call 10 seconds after they opt in, to the follow-up text they get 4 months later when they're finally ready to move forward.</p>
       </div>
-      <div class="value-card">
+      <div class="value-card reveal reveal-delay-1">
         <h3>We Protect Your Market.</h3>
         <p>One roofing company per 80km radius. We don't help you generate demand and then sell the same system to your competitor. Your territory is yours, period.</p>
       </div>
-      <div class="value-card">
+      <div class="value-card reveal reveal-delay-2">
         <h3>AI Speed. Human Judgment.</h3>
         <p>Our AI agents handle instant response and tireless follow-up at a scale no human team can match. Our human AI managers review every interaction daily to make sure quality never slips. Fast doesn't mean sloppy.</p>
       </div>
@@ -392,17 +408,17 @@
 <!-- RESULTS -->
 <section class="section section-surface2">
   <div class="wrap">
-    <div class="section-header center">
+    <div class="section-header center reveal">
       <p class="eyebrow">The Results</p>
       <h2 class="section-heading">The results speak clearly.</h2>
       <p class="section-sub">We let the numbers do the talking. No inflated claims, no borrowed credibility.</p>
     </div>
     <div class="stats-row">
-      <div class="stat-block">
+      <div class="stat-block reveal">
         <div class="num">$785,000+</div>
         <p>Revenue closed by JJ Roofing through our system in just over one year of working together.</p>
       </div>
-      <div class="stat-block">
+      <div class="stat-block reveal reveal-delay-1">
         <div class="num">$68,250</div>
         <p>A single deal recovered by the AI follow-up agent months after the original quote. The owner had completely forgotten about that lead. The AI hadn't.</p>
       </div>
@@ -461,5 +477,17 @@
   </div>
 </footer>
 
+<script>
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    progressBar.style.width = pct + '%';
+  });
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

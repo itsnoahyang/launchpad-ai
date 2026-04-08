@@ -16,6 +16,16 @@
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transition: width 0.1s linear;
+    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+
     :root {
       --bg:        #080808;
       --surface:   #111111;
@@ -290,6 +300,7 @@
   </style>
 </head>
 <body>
+<div id="scroll-progress"></div>
 
 <!-- NAV -->
 <header class="nav">
@@ -329,7 +340,7 @@
   <div class="contact-layout">
 
     <!-- Left: Info -->
-    <div class="contact-info">
+    <div class="contact-info reveal">
       <p class="eyebrow">What To Expect</p>
       <h2>This isn't a sales call. It's a discovery.</h2>
       <p>We turn away more roofing companies than we take on. Not because we're arrogant, but because the model only works when we're selective. Territory exclusivity is a two-way commitment.</p>
@@ -365,7 +376,7 @@
     </div>
 
     <!-- Right: Form -->
-    <div class="form-card" id="apply">
+    <div class="form-card reveal reveal-delay-1" id="apply">
       <h3>Apply to Work With Launchpad AI</h3>
       <p class="form-sub">Takes about 2 minutes. We'll review and follow up within one business day.</p>
 
@@ -436,5 +447,16 @@
   </div>
 </footer>
 
+<script>
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    progressBar.style.width = pct + '%';
+  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

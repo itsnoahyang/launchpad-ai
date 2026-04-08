@@ -8,22 +8,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     /* ── GHL container overrides ───────────────────────────── */
     html, body { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
     .elfsight-app, .funnelish--page, .funnelish--sections,
     #page, .page-container, .container-fluid,
     [class*="section-"], [class*="container"] { max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
 
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
       --bg:        #080808;
       --surface:   #111111;
       --surface2:  #181818;
       --border:    rgba(255,255,255,0.08);
-      --blue:       #0067eb;
-      --blue-h:     #1a7aff;
-      --gold:       #ffcf00;
+      --blue:      #0067eb;
+      --blue-h:    #1a7aff;
+      --gold:      #ffcf00;
       --white:     #ffffff;
       --sub:       rgba(255,255,255,0.62);
       --muted:     rgba(255,255,255,0.35);
@@ -40,6 +40,29 @@
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
+
+    /* ── Scroll progress bar ───────────────────────────────── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transition: width 0.1s linear;
+    }
+
+    /* ── Reveal on scroll ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
 
     /* ── Container ─────────────────────────────────────────── */
     .wrap {
@@ -88,7 +111,6 @@
     }
     .nav-cta:hover { background: var(--blue-h); }
 
-    /* Hamburger */
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
       background: none; border: none; cursor: pointer; padding: 4px;
@@ -194,6 +216,7 @@
       padding: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
       border-right: 1px solid var(--border);
       text-align: center;
+      position: relative;
     }
     .stat-item:last-child { border-right: none; }
     .stat-num {
@@ -204,6 +227,25 @@
     .stat-label {
       font-size: clamp(0.75rem, 1.5vw, 0.85rem);
       color: var(--sub); margin-top: 0.5rem; line-height: 1.4;
+    }
+
+    /* Live pulse indicator */
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #22c55e;
+      margin-bottom: 0.4rem;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34,197,94,0.4);
+      animation: pulse-live 1.8s infinite;
+    }
+    @keyframes pulse-live {
+      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+      70%  { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
     }
 
     /* ── Sections ──────────────────────────────────────────── */
@@ -242,6 +284,11 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       padding: clamp(1.5rem, 3vw, 2rem);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .problem-card:hover {
+      border-color: rgba(0,103,235,0.35);
+      transform: translateY(-3px);
     }
     .problem-card h3 {
       font-size: 1.05rem; font-weight: 700;
@@ -249,37 +296,146 @@
     }
     .problem-card p { color: var(--sub); font-size: 0.93rem; }
 
-    /* ── Step cards ────────────────────────────────────────── */
-    .steps-grid {
+    /* ── Pipeline diagram ──────────────────────────────────── */
+    .pipeline {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-      gap: 1.25rem;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 0;
+      margin-top: clamp(2rem, 4vw, 3rem);
     }
-    .step-card {
+    .pipeline-step {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: var(--r);
+      border-radius: 14px;
       padding: clamp(1.5rem, 3vw, 2.25rem);
       position: relative; overflow: hidden;
+      transition: border-color 0.35s, transform 0.35s;
+      cursor: default;
     }
-    .step-card::before {
-      content: attr(data-num);
-      position: absolute; top: -0.5rem; right: 1rem;
-      font-size: 6rem; font-weight: 900;
-      color: rgba(255,255,255,0.04);
-      line-height: 1; pointer-events: none;
-      letter-spacing: -0.04em;
+    .pipeline-step:hover {
+      border-color: var(--blue);
+      transform: translateY(-4px);
     }
-    .step-card h3 {
-      font-size: 1.1rem; font-weight: 700;
+    .pipeline-step::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-h));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .pipeline-step:hover::after { transform: scaleX(1); }
+
+    .step-num {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue);
+      margin-bottom: 0.75rem;
+    }
+    .pipeline-step h3 {
+      font-size: 1.05rem; font-weight: 700;
       margin-bottom: 0.75rem; line-height: 1.3;
-      position: relative; z-index: 1;
     }
-    .step-card p {
-      color: var(--sub); font-size: 0.93rem; line-height: 1.7;
-      position: relative; z-index: 1;
+    .pipeline-step p {
+      color: var(--sub); font-size: 0.9rem; line-height: 1.7;
     }
-    .step-card p + p { margin-top: 0.75rem; }
+    .pipeline-step p + p { margin-top: 0.6rem; }
+
+    .pipeline-step .step-icon {
+      width: 40px; height: 40px;
+      background: rgba(0,103,235,0.12);
+      border: 1px solid rgba(0,103,235,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Animated connector arrow */
+    .pipeline-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 clamp(0.5rem, 2vw, 1.25rem);
+      position: relative;
+      min-width: 48px;
+    }
+    .pipeline-connector svg {
+      overflow: visible;
+    }
+    .connector-line {
+      stroke: var(--border);
+      stroke-width: 2;
+      stroke-dasharray: 6 4;
+      animation: dash-flow 1.5s linear infinite;
+    }
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -20; }
+    }
+    .connector-arrow {
+      fill: var(--blue);
+      animation: arrow-pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes arrow-pulse {
+      0%, 100% { opacity: 0.5; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(3px); }
+    }
+
+    /* Lead dot traveling animation */
+    .lead-flow {
+      position: relative;
+      height: 40px;
+      margin-top: clamp(1.5rem, 3vw, 2.5rem);
+      overflow: hidden;
+    }
+    .lead-flow-track {
+      position: absolute; top: 50%; left: 0; right: 0;
+      height: 2px; background: var(--border);
+      transform: translateY(-50%);
+    }
+    .lead-flow-fill {
+      position: absolute; top: 50%; left: 0;
+      height: 2px; width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transform: translateY(-50%);
+      animation: fill-track 3s ease-in-out infinite;
+    }
+    @keyframes fill-track {
+      0% { width: 0; opacity: 1; }
+      80% { width: 100%; opacity: 1; }
+      100% { width: 100%; opacity: 0; }
+    }
+    .lead-dot-wrap {
+      position: absolute; top: 50%;
+      transform: translate(-50%, -50%);
+      animation: travel 3s ease-in-out infinite;
+    }
+    .lead-dot-wrap::before {
+      content: 'New Lead';
+      position: absolute; bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem; font-weight: 700; color: var(--white);
+      white-space: nowrap; background: var(--blue);
+      padding: 2px 7px; border-radius: 4px;
+    }
+    .lead-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0,103,235,0.25), 0 0 16px rgba(0,103,235,0.5);
+    }
+    @keyframes travel {
+      0%   { left: 0%; opacity: 0; }
+      5%   { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { left: 100%; opacity: 0; }
+    }
+    .flow-label {
+      position: absolute; bottom: 0;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .flow-label.left  { left: 0; }
+    .flow-label.mid   { left: 50%; transform: translateX(-50%); }
+    .flow-label.right { right: 0; }
 
     /* ── Case study ────────────────────────────────────────── */
     .split {
@@ -291,6 +447,7 @@
     .quote-block {
       border-left: 3px solid var(--blue);
       padding-left: clamp(1.25rem, 3vw, 2rem);
+      position: relative;
     }
     .quote-block blockquote {
       font-size: clamp(1.25rem, 2.5vw, 1.75rem);
@@ -309,7 +466,9 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       padding: 1.25rem;
+      transition: border-color 0.3s;
     }
+    .mini-stat:hover { border-color: rgba(0,103,235,0.4); }
     .mini-stat .num {
       font-size: clamp(1.4rem, 3vw, 2rem);
       font-weight: 900; color: var(--blue);
@@ -318,6 +477,40 @@
     .mini-stat .lbl {
       font-size: 0.8rem; color: var(--sub);
       margin-top: 0.4rem; line-height: 1.4;
+    }
+
+    /* ── Animated revenue bar ──────────────────────────────── */
+    .revenue-visual {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      margin-bottom: 1.5rem;
+    }
+    .rev-label {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem;
+    }
+    .rev-bar-row {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 0.85rem;
+    }
+    .rev-bar-label {
+      font-size: 0.82rem; color: var(--sub); min-width: 90px; flex-shrink: 0;
+    }
+    .rev-bar-track {
+      flex: 1; height: 8px; background: rgba(255,255,255,0.06);
+      border-radius: 4px; overflow: hidden;
+    }
+    .rev-bar-fill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      width: 0;
+      transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .rev-bar-fill.animated { width: var(--target-width); }
+    .rev-bar-val {
+      font-size: 0.82rem; font-weight: 700; color: var(--white);
+      min-width: 60px; text-align: right; flex-shrink: 0;
     }
 
     /* ── Fit section ────────────────────────────────────────── */
@@ -357,6 +550,11 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .result-card:hover {
+      border-color: rgba(0,103,235,0.4);
+      transform: translateY(-3px);
     }
     .result-card h3 {
       font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;
@@ -388,6 +586,11 @@
       margin: 0 auto 2.25rem; font-size: 1.05rem; line-height: 1.7;
     }
 
+    /* ── Body copy helpers ─────────────────────────────────── */
+    .body-copy p { color: var(--sub); font-size: 0.98rem; line-height: 1.75; }
+    .body-copy p + p { margin-top: 1rem; }
+    .body-copy strong { color: var(--white); }
+
     /* ── Footer ────────────────────────────────────────────── */
     .footer {
       background: var(--surface);
@@ -409,16 +612,13 @@
     }
     .footer-links a:hover { color: var(--white); }
 
-    /* ── Body copy helpers ─────────────────────────────────── */
-    .body-copy p { color: var(--sub); font-size: 0.98rem; line-height: 1.75; }
-    .body-copy p + p { margin-top: 1rem; }
-    .body-copy strong { color: var(--white); }
-
     /* ── Responsive ────────────────────────────────────────── */
     @media (max-width: 1024px) {
       .split { grid-template-columns: 1fr; }
       .stats-2x2 { grid-template-columns: 1fr 1fr; }
       .fit-grid { grid-template-columns: 1fr; }
+      .pipeline { grid-template-columns: 1fr; }
+      .pipeline-connector { display: none; }
     }
 
     @media (max-width: 768px) {
@@ -428,7 +628,6 @@
       .stats-bar { grid-template-columns: 1fr; }
       .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
       .stat-item:last-child { border-bottom: none; }
-      .steps-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -440,6 +639,8 @@
   </style>
 </head>
 <body>
+
+<div id="scroll-progress"></div>
 
 <!-- NAV -->
 <header class="nav">
@@ -480,12 +681,13 @@
       <a href="#system" class="btn btn-ghost">See How It Works</a>
     </div>
 
-    <div class="stats-bar">
+    <div class="stats-bar reveal" style="transition-delay:0.3s">
       <div class="stat-item">
-        <div class="stat-num">$785K+</div>
+        <div class="stat-num" data-count="785" data-prefix="$" data-suffix="K+">$785K+</div>
         <div class="stat-label">Revenue closed for one client in over a year</div>
       </div>
       <div class="stat-item">
+        <div class="live-badge"><span class="live-dot"></span>Live</div>
         <div class="stat-num">10s</div>
         <div class="stat-label">Average speed-to-lead. AI calls every new opt-in</div>
       </div>
@@ -500,25 +702,25 @@
 <!-- PROBLEM -->
 <section class="section section-surface">
   <div class="wrap">
-    <div class="section-header">
+    <div class="section-header reveal">
       <p class="eyebrow">The Problem</p>
       <h2 class="section-heading">Here's What's Actually Broken</h2>
       <p class="section-sub">Most roofing companies lose the job before they ever pick up the phone.</p>
     </div>
     <div class="grid-2">
-      <div class="problem-card">
+      <div class="problem-card reveal reveal-delay-1">
         <h3>Your ads attract tire-kickers, not buyers.</h3>
         <p>Generic campaigns pull in people shopping for the cheapest option. That's not your customer.</p>
       </div>
-      <div class="problem-card">
+      <div class="problem-card reveal reveal-delay-2">
         <h3>Your leads go cold before anyone calls them.</h3>
         <p>The average company takes hours (sometimes days) to follow up. The homeowner moved on in minutes.</p>
       </div>
-      <div class="problem-card">
+      <div class="problem-card reveal reveal-delay-3">
         <h3>Your sales team is inconsistent.</h3>
         <p>Some days they're sharp. Some days leads fall through the cracks. You can't scale what you can't rely on.</p>
       </div>
-      <div class="problem-card">
+      <div class="problem-card reveal reveal-delay-4">
         <h3>Deals you quoted months ago? Gone.</h3>
         <p>No one's following up 90 days later. Those homeowners didn't disappear. They just never heard from you again.</p>
       </div>
@@ -529,23 +731,59 @@
 <!-- SYSTEM -->
 <section class="section" id="system">
   <div class="wrap">
-    <div class="section-header">
+    <div class="section-header reveal">
       <p class="eyebrow">How It Works</p>
       <h2 class="section-heading">A system built for one thing:<br>filling your calendar.</h2>
       <p class="section-sub">We handle everything from the first ad impression to the booked appointment, so your team shows up to warm, qualified leads.</p>
     </div>
-    <div class="steps-grid">
-      <div class="step-card" data-num="01">
+
+    <!-- Animated lead flow -->
+    <div class="lead-flow reveal">
+      <div class="lead-flow-track"></div>
+      <div class="lead-flow-fill"></div>
+      <div class="lead-dot-wrap">
+        <div class="lead-dot"></div>
+      </div>
+      <span class="flow-label left">Meta Ad</span>
+      <span class="flow-label mid">AI Calls in 10s</span>
+      <span class="flow-label right">Booked</span>
+    </div>
+
+    <!-- Pipeline steps -->
+    <div class="pipeline" style="margin-top: clamp(2rem, 4vw, 3rem);">
+      <div class="pipeline-step reveal reveal-delay-1">
+        <div class="step-icon">📡</div>
+        <div class="step-num">Step 01</div>
         <h3>High-Converting Meta Ads</h3>
         <p>We run a proprietary neighborhood selection offer on Facebook and Instagram. Not the same tired "free quote" ads everyone else runs. It creates exclusivity, pre-qualifies leads through the form, and consistently outperforms standard campaigns.</p>
         <p>Homeowners apply to be selected for your services. That shift in positioning changes the quality of every lead that comes in.</p>
       </div>
-      <div class="step-card" data-num="02">
+
+      <div class="pipeline-connector">
+        <svg width="32" height="60" viewBox="0 0 32 60">
+          <line class="connector-line" x1="4" y1="30" x2="22" y2="30" stroke-dashoffset="0"/>
+          <polygon class="connector-arrow" points="22,24 32,30 22,36"/>
+        </svg>
+      </div>
+
+      <div class="pipeline-step reveal reveal-delay-2">
+        <div class="step-icon">🤖</div>
+        <div class="step-num">Step 02</div>
         <h3>AI Speed-to-Lead Agent</h3>
         <p>Within 10 seconds of a lead opting in, our AI agent calls and texts them. Trained on millions of roofing sales calls, it confirms interest, qualifies further, and books them directly into your calendar.</p>
         <p>Available 24/7, zero sick days. No more leads sitting in a CRM while your team finishes lunch.</p>
       </div>
-      <div class="step-card" data-num="03">
+
+      <div class="pipeline-connector">
+        <svg width="32" height="60" viewBox="0 0 32 60">
+          <line class="connector-line" x1="4" y1="30" x2="22" y2="30" stroke-dashoffset="0"/>
+          <polygon class="connector-arrow" points="22,24 32,30 22,36"/>
+        </svg>
+      </div>
+
+      <div class="pipeline-step reveal reveal-delay-3">
+        <div class="step-icon">🔁</div>
+        <div class="step-num">Step 03</div>
         <h3>Long-Term Follow-Up Automation</h3>
         <p>Most revenue is lost to silence. Our follow-up agent nurtures every lead until they give a definitive yes or no, even months after the initial quote.</p>
         <p>No lead falls through the cracks, even if you forget they exist. The AI doesn't forget.</p>
@@ -557,16 +795,31 @@
 <!-- CASE STUDY -->
 <section class="section section-surface">
   <div class="wrap">
-    <div class="section-header">
+    <div class="section-header reveal">
       <p class="eyebrow">Case Study</p>
       <h2 class="section-heading">$785,000+ for one roofing company.</h2>
     </div>
     <div class="split">
-      <div class="quote-block">
+      <div class="quote-block reveal">
         <blockquote>"We forgot Steven existed — then the AI collected $68,000 from him four months after the quote."</blockquote>
         <p class="quote-attr">JJ Roofing, Launchpad AI client for over one year</p>
+
+        <!-- Animated revenue bars -->
+        <div class="revenue-visual" style="margin-top: 2rem;" id="revenue-visual">
+          <p class="rev-label">Revenue breakdown</p>
+          <div class="rev-bar-row">
+            <span class="rev-bar-label">Total closed</span>
+            <div class="rev-bar-track"><div class="rev-bar-fill" style="--target-width: 100%"></div></div>
+            <span class="rev-bar-val">$785K+</span>
+          </div>
+          <div class="rev-bar-row">
+            <span class="rev-bar-label">AI recovered</span>
+            <div class="rev-bar-track"><div class="rev-bar-fill" style="--target-width: 8.7%"></div></div>
+            <span class="rev-bar-val">$68,250</span>
+          </div>
+        </div>
       </div>
-      <div>
+      <div class="reveal reveal-delay-2">
         <p style="color: var(--sub); font-size: 0.98rem; line-height: 1.75; margin-bottom: 1.25rem;">
           That's the power of automated long-term follow-up. Manual follow-up piles up and gets dropped. Our AI never forgets, never gets overwhelmed, and never stops working your pipeline.
         </p>
@@ -575,11 +828,11 @@
         </p>
         <div class="stats-2x2">
           <div class="mini-stat">
-            <div class="num">$785K+</div>
+            <div class="num" data-count="785" data-prefix="$" data-suffix="K+">$785K+</div>
             <div class="lbl">Revenue Closed</div>
           </div>
           <div class="mini-stat">
-            <div class="num">$68,250</div>
+            <div class="num" data-count="68250" data-prefix="$" data-comma="true">$68,250</div>
             <div class="lbl">Single Deal Recovered by AI</div>
           </div>
           <div class="mini-stat">
@@ -587,7 +840,7 @@
             <div class="lbl">Lead Response Time</div>
           </div>
           <div class="mini-stat">
-            <div class="num">3–4 mo</div>
+            <div class="num">3-4 mo</div>
             <div class="lbl">Follow-Up That Closed the Deal</div>
           </div>
         </div>
@@ -600,7 +853,7 @@
 <section class="section section-surface2">
   <div class="wrap">
     <div class="split">
-      <div>
+      <div class="reveal">
         <p class="eyebrow">Our Standard</p>
         <h2 class="section-heading">AI-Powered.<br>Human-Managed.</h2>
         <div class="body-copy" style="margin-top: 1.25rem;">
@@ -609,7 +862,7 @@
           <p><strong>AI for speed. Humans for quality. That's the standard.</strong></p>
         </div>
       </div>
-      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: clamp(1.5rem, 3vw, 2.25rem);">
+      <div class="reveal reveal-delay-2" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: clamp(1.5rem, 3vw, 2.25rem);">
         <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Territory Exclusivity: One Roofing Company Per 80km Radius</h3>
         <p style="color: var(--sub); font-size: 0.93rem; line-height: 1.75; margin-bottom: 1rem;">
           We don't sell this system to your competitors down the road. When you lock in your territory, it's yours. The ad campaigns, the AI agent, the follow-up sequences. None of it gets replicated for another roofer in your market.
@@ -626,11 +879,11 @@
 <!-- FIT -->
 <section class="section section-surface">
   <div class="wrap">
-    <div class="section-header center">
+    <div class="section-header center reveal">
       <h2 class="section-heading">Is This For You?</h2>
     </div>
     <div class="fit-grid">
-      <div class="fit-col">
+      <div class="fit-col reveal reveal-delay-1">
         <h3>This is for roofing companies that:</h3>
         <ul class="fit-list">
           <li>Charge above average and compete on quality, not price</li>
@@ -639,7 +892,7 @@
           <li>Want predictable monthly revenue growth instead of feast-or-famine cycles</li>
         </ul>
       </div>
-      <div class="fit-col not">
+      <div class="fit-col not reveal reveal-delay-2">
         <h3>This is NOT for you if:</h3>
         <ul class="fit-list">
           <li>You compete on being the cheapest option in the market</li>
@@ -654,28 +907,28 @@
 <!-- RESULTS -->
 <section class="section">
   <div class="wrap">
-    <div class="section-header center">
+    <div class="section-header center reveal">
       <p class="eyebrow">What Changes</p>
       <h2 class="section-heading">What you get when the system runs.</h2>
     </div>
     <div class="results-grid">
-      <div class="result-card">
+      <div class="result-card reveal reveal-delay-1">
         <h3>Faster Response</h3>
         <p>Every lead contacted within 10 seconds. No exceptions, no matter the time of day.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal reveal-delay-2">
         <h3>Better Leads</h3>
         <p>Homeowners who applied to work with you. Not people hunting for the lowest bid.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal reveal-delay-3">
         <h3>More Booked Appointments</h3>
         <p>Qualified prospects on your calendar, ready to talk about a real project.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal reveal-delay-4">
         <h3>Recovered Revenue</h3>
         <p>Deals you forgot about, closed months later by AI that never stops following up.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal" style="transition-delay:0.5s">
         <h3>Predictable Growth</h3>
         <p>A system that runs whether your sales team had their coffee or not.</p>
       </div>
@@ -684,7 +937,7 @@
 </section>
 
 <!-- CTA -->
-<section class="cta-strip section-surface" id="apply">
+<section class="cta-strip section-surface reveal" id="apply">
   <div class="wrap">
     <h2>Your territory is either<br>available or it isn't.</h2>
     <p>We only work with one roofing company per 80km radius. Once your market is taken, it's taken. Apply to find out if your area is still open.</p>
@@ -703,6 +956,72 @@
     </ul>
   </div>
 </footer>
+
+<script>
+  // ── Scroll progress bar ──────────────────────────────────
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    progressBar.style.width = pct + '%';
+  });
+
+  // ── Reveal on scroll ─────────────────────────────────────
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  // ── Counter animation ────────────────────────────────────
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.count);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const useComma = el.dataset.comma === 'true';
+    const duration = 1800;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * target);
+      const formatted = useComma ? current.toLocaleString() : current;
+      el.textContent = prefix + formatted + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.target.dataset.count) {
+        animateCounter(e.target);
+        counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+  // ── Revenue bar animation ────────────────────────────────
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.rev-bar-fill').forEach(bar => {
+          bar.classList.add('animated');
+        });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  const rv = document.getElementById('revenue-visual');
+  if (rv) barObs.observe(rv);
+</script>
 
 </body>
 </html>
